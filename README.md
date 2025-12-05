@@ -12,7 +12,7 @@ In this research, we introduce GraphEPV, a graph neural network architecture tha
 We train, test and validate GraphEPV using 63 matches of [**public** World Cup 2022 tracking and event data](https://drive.google.com/drive/folders/1_a_q1e9CXeEPJ3GdCv_3-rNO3gPqacfa), where each graph represents a single frame of positional data. Data from the final is set aside for further validation. Despite the limited number of goals in our dataset, our model achieves a Precision-Recall AUC of 0.0643, an 11x improvement over random guessing.
 
 #### PEICA: Player Evaluation through Individual Credit Attribution
-To quantify individual player contributions to their team’s objective, we employ a Shapley method where we generate 1,000 masked graph variants per frame. For each variant, a random subset of players is masked using the average values of a different random subset of teammates. This team-aware masking strategy preserves the underlying graph structure while systematically removing individual player influences. We then make predictions on these randomly adjusted graphs using GraphEPV. By comparing predictions across masked coalitions, we uncover each player's contribution to the predicted probability of scoring or preventing a goal within the next 10 seconds.
+To quantify individual player contributions to their team’s objective, we employ a Shapley method where we generate masked graph variants per frame. For each variant, a random subset of players is masked using the average values of a different random subset of teammates. This team-aware masking strategy preserves the underlying graph structure while systematically removing individual player influences. We then make predictions on these randomly adjusted graphs using GraphEPV. By comparing predictions across masked coalitions, we uncover each player's contribution to the predicted probability of scoring or preventing a goal within the next 10 seconds.
 
 In Figure 1, we can clearly identify individual player contributions throughout the possession sequence. 
 It depicts the end position (and prior movements) of a possession sequence with relevant moments annotated (1-8). 
@@ -25,7 +25,9 @@ It depicts the end position (and prior movements) of a possession sequence with 
 ---
 
 #### Results
-We validate PEICA by comparing player total scores of ten different possession sequences to standardized expert ratings (μ<sub>rater</sub>) from ten U.S. Soccer Youth National Team Head Coaches and Performance Analysts. These ratings are given on a 5-point Likert scale using anonymized tracking data videos from the final, one per possession sequence. Our ten raters achieve an Intraclass Correlation Coefficient (ICC) of 0.967 and their average ratings have a Spearman’s rank correlation of 0.536 with PEICA. Additionally, we compare our results to an event data framework that values on-ball actions by estimating scoring probabilities (VAEP) [Decroos 2019 et al.] to show a tremendous increase in both quality and quantity of insights, interpretability and granularity gained when using PEICA (see Table 1).
+We validate PEICA by comparing player total scores of ten different possession sequences (see Table 2) to standardized expert ratings (μ<sub>rater</sub>) from ten U.S. Soccer Youth National Team Head Coaches and Performance Analysts. These ratings are given on a 5-point Likert scale using anonymized tracking data videos from the final, one per possession sequence. Our ten raters achieve an Intraclass Correlation Coefficient (ICC) of 0.967 and their average ratings have a Spearman’s rank correlation of 0.536 with PEICA. Additionally, we compare our results to an event data framework that values on-ball actions by estimating scoring probabilities (VAEP) [Decroos 2019 et al.] to show a tremendous increase in both quality and quantity of insights, interpretability and granularity gained when using PEICA (see Table 1).
+
+
 
 <div align="center">
 <table>
@@ -214,3 +216,88 @@ PEICA allows us to evaluate player performance by directly quantifying each play
 This approach enables in-depth, data-driven player evaluation, scouting, and tactical analysis through consistent, automated analysis. The model's strong correlation with expert judgment validates its practical reliability while providing objective quantifications of every player's contribution.
 
 Our work addresses a significant gap in sports analytics and is applicable to other invasion sports (e.g., American football, basketball, and hockey).
+
+---
+
+### Benchmark
+
+To encourage reproducibility and to facilitate researchers to benchmark their model outputs against the insights of expert soccer practitioners, we share these 10 segments (see Table 2) as:
+- [Tracking data and Event data](benchmark/segments.ipynb)
+- [Anonymized top-down positional tracking data videos](benchmark/videos/1.mp4).
+- [Aggregated standardized expert grades, and PEICA, VAEP and AtomicVAEP values for these 10 segments](benchmark/benchmark.csv). Within this file `anon_player_id` refers to the players in the anonymized videos.
+
+<div align="center">
+<table>
+  <thead>
+    <tr>
+      <th>Segment</th>
+      <th>Start Time</th>
+      <th>End Time</th>
+      <th>Period</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>16:07</td>
+      <td>16:15</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>12:47</td>
+      <td>13:07</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>20:38</td>
+      <td>20:45</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>34:00</td>
+      <td>34:14</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>13:15</td>
+      <td>13:19</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>6</td>
+      <td>16:36</td>
+      <td>16:54</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>7</td>
+      <td>17:15</td>
+      <td>17:24</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>8</td>
+      <td>17:56</td>
+      <td>18:04</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>9</td>
+      <td>33:06</td>
+      <td>33:12</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>10</td>
+      <td>35:48</td>
+      <td>35:59</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+<caption>Table 2. Ten segments from the FIFA 2022 World Cup final between Argentina and France. Videos, ratings and raw event and tracking data for these segments is avaible in this GitHub repository.</caption>
+</div>
